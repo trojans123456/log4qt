@@ -30,10 +30,10 @@
  * Dependencies
  ******************************************************************************/
 
-#include "log4qt/helpers/logobject.h"
+#include "helpers/logobject.h"
 
-#include "log4qt/helpers/logobjectptr.h"
-#include "log4qt/log4qt.h"
+#include "helpers/logobjectptr.h"
+#include "log4qt.h"
 
 
 /******************************************************************************
@@ -83,6 +83,10 @@ namespace Log4Qt
 	        
 	public:
 	    virtual QString contentType() const;
+        /**
+         * @brief footer  获取layout的footer
+         * @return
+         */
 	    QString footer() const;
 	    QString header() const;
 	    // JAVA: virtual bool ignoresThrowable() const;

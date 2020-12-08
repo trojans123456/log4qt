@@ -1,0 +1,18 @@
+Log4Qt::PropertyConfigurator::configure("QtLog4Qt.conf");
+    Log4Qt::LogManager::setHandleQtMessages(true);
+
+QtLog4Qt.conf
+
+log4j.rootLogger=debug,File
+log4j.appender.File=org.apache.log4j.FileAppender
+log4j.appender.File=org.apache.log4j.RollingFileAppender
+log4j.appender.File.File=Log.log
+log4j.appender.File.MaxFileSize=3072KB
+log4j.appender.File.AppendFile=true
+log4j.appender.File.layout=org.apache.log4j.PatternLayout
+log4j.appender.File.layout.ConversionPattern=%-d{yyyy-MM-dd HH:mm:ss} [%p] %m%n
+
+https://blog.51cto.com/9291927/2299389
+https://zhuanlan.zhihu.com/p/64430593
+
+https://www.codercto.com/a/31916.html

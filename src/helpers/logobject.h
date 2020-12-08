@@ -40,13 +40,29 @@
 
 #include <QtCore/QObject>
 
-#include "log4qt/helpers/classlogger.h"
+#include "helpers/classlogger.h"
 #if QT_VERSION >= QT_VERSION_CHECK(4, 4, 0)
 #	include <QtCore/QAtomicInt>
 #	ifndef Q_ATOMIC_INT_REFERENCE_COUNTING_IS_ALWAYS_NATIVE
 #		warning "QAtomicInt reference counting is not native. The class Log4Qt::LogObject is not thread-safe."
 #	endif
 #endif
+
+/****************************************************************
+ *           LogObject
+ *              ^
+ *              |
+ *            Layout
+ *              ^
+ *              |
+ *  ------------------------------
+ *  |               |            |
+ * PatternLayout SimpleLayout   TTCCLayout
+ *
+ *PatternLayout：根据一个模式字符串输出日志事件；
+ *SimpleLayout：输出日志事件的级别和消息；
+ *TTCCLayout：输出日志事件的时间、线程名称、Logger名称和嵌套的诊断上下文信息
+*/
 
 
 namespace Log4Qt

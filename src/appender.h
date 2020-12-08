@@ -30,11 +30,11 @@
  * Dependencies
  ******************************************************************************/
 
-#include "log4qt/helpers/logobject.h"
+#include "helpers/logobject.h"
 
-#include "log4qt/helpers/logobjectptr.h"
+#include "helpers/logobjectptr.h"
 
-#include "log4qt/logger.h"
+#include "logger.h"
 
 
 /******************************************************************************

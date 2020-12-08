@@ -40,6 +40,8 @@
  * Declarations
  ******************************************************************************/
 
+/** mapped Diagnositc Context 映射诊断上下文  */
+
 namespace Log4Qt 
 {
 	    

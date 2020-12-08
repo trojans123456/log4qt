@@ -32,8 +32,8 @@
 
 
 #include <QtCore/QHash>
-#include "log4qt/helpers/logobjectptr.h"
-#include "log4qt/log4qt.h"
+#include "helpers/logobjectptr.h"
+#include "log4qt.h"
 
 
 /******************************************************************************

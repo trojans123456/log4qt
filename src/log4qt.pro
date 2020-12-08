@@ -26,3 +26,6 @@ header_varia.files = varia/*.h
 header_varia.path = $$PWD/../dll/include/log4qt/varia
 INSTALLS += header_varia
 
+DISTFILES += \
+    demo.txt
+

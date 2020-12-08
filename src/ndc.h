@@ -33,12 +33,14 @@
 #include <QtCore/QString>
 #include <QtCore/QStack>
 #include <QtCore/QThreadStorage>
-#include "log4qt/log4qt.h"
+#include "log4qt.h"
 
 
 /******************************************************************************
  * Declarations
  ******************************************************************************/
+
+/** Nested Diagnostic Contex 嵌套诊断上下文  */
 
 namespace Log4Qt 
 {
