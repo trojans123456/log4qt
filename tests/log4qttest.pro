@@ -1,10 +1,11 @@
-# include (../src/log4qt/log4qt.pri)
+ include (../src/log4qt/log4qt.pri)
 
 TEMPLATE = app
 
 DISTFILES += \
     bk_log4qt.properties \
-    qlog.config
+    log4qt.proerties.cfg \
+    log.cfg
 
 
 INCLUDEPATH += $$PWD/../dll/include

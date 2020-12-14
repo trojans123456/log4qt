@@ -1,0 +1,122 @@
+bool InitializeLog4QtView(LogView *widget)
+{
+        Log4Qt::Logger *logger = Log4Qt::Logger::rootLogger();
+        LogViewAppender *viewappender = new LogViewAppender;
+        viewappender->setName("ViewAppender");
+        Log4Qt::TTCCLayout *viewlayout = new Log4Qt::TTCCLayout(Log4Qt::TTCCLayout::ISO8601);
+        viewlayout->setThreadPrinting(true);
+        viewappender->setLayout(viewlayout);
+        viewappender->activateOptions();
+        logger->addAppender(viewappender);
+        QObject::connect(viewappender, SIGNAL(OnMessageAppend(QString)), widget, SLOT(appendLog(QString)));
+        return true;
+}
+bool FinalizeLog4Qt()
+{
+        Log4Qt::Logger *logger = Log4Qt::Logger::rootLogger();
+        logger->removeAllAppenders();
+        return true;
+}
+
+xx.c
+----------------
+#include "logview.h"
+#include <QtCore/QDebug>
+#include <QtGui/QTextBrowser>
+#include <QtGui/QLayout>
+LogView::LogView(QWidget* parent)
+        :QWidget(parent)
+{
+        QVBoxLayout *vlayout = new QVBoxLayout;
+        setLayout(vlayout);
+        qRegisterMetaType<QTextCursor>("QTextCursor");
+        mView = new QTextBrowser(this);
+        vlayout->addWidget(mView); 
+        showMaximized();
+}
+void LogView::appendLog(const QString &pMessage)
+{
+        QMutexLocker lock(&mMutex);
+        //QString msg = pMessage.trimmed();
+        //mView->append(msg);
+        mView->insertPlainText(pMessage);
+        mView->moveCursor(QTextCursor::End);
+        mView->ensureCursorVisible();
+}
+LogViewAppender::LogViewAppender(QObject *parent) :
+        Log4Qt::AppenderSkeleton(parent),mLogView(NULL)
+{
+}
+LogViewAppender::~LogViewAppender()
+{
+        if (mLogView) {
+                mLogView->close();
+                mLogView = NULL;
+        }
+}
+bool LogViewAppender::requiresLayout() const
+{
+        return true;
+}
+void LogViewAppender::append(const Log4Qt::LoggingEvent &rEvent)
+{
+        Q_ASSERT_X(layout(), "LogViewAppender::append()", "Layout must not be null");
+        QString message(layout()->format(rEvent));
+        emit OnMessageAppend(message);
+        /*if (!mLogView) {
+                mLogView = new LogView;
+        }
+        mLogView->show(); //
+        mLogView->appendLog(message);*/
+}
+#ifndef QT_NO_DEBUG_STREAM
+QDebug LogViewAppender::debug(QDebug &rDebug) const
+{
+        return rDebug.space();
+}
+#endif //QT_NO_DEBUG_STREAM
+
+
+xx.h
+--------
+#ifndef LOGVIEW_H
+#define LOGVIEW_H
+class QTextBrowser;
+/*! \brief root::LogView
+        \author Wang Bin <[email]wbsecg1@gmail.com[/email]>
+        \version 0.01
+        \date 2011.08.03
+
+        Log信息显示窗口。
+*/
+class LogView : public QWidget
+{
+        Q_OBJECT
+        LOG4QT_DECLARE_QCLASS_LOGGER
+public:
+        LogView(QWidget *parent = 0);
+        QTextBrowser *view() const {return mView;}
+public slots:
+        void appendLog(const QString &pMessage);
+private:
+        QMutex mMutex;
+        QTextBrowser *mView;
+};
+class LogViewAppender : public Log4Qt::AppenderSkeleton
+{
+    Q_OBJECT
+public:
+        LogViewAppender(QObject *pParent = 0);
+        ~LogViewAppender();
+signals:
+        void OnMessageAppend(const QString& msg);
+protected:
+        virtual bool requiresLayout() const;
+        virtual void append(const Log4Qt::LoggingEvent &rEvent);
+#ifndef QT_NO_DEBUG_STREAM
+        virtual QDebug debug(QDebug &rDebug) const;
+#endif //QT_NO_DEBUG_STREAM
+private:
+        LogView *mLogView;
+};
+#endif // LOGVIEW_H
