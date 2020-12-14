@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QTextCodec>
 #include <QTimer>
+#include <QTextStream>
 
 #ifdef __linux__
 #include <unistd.h>
@@ -61,7 +62,7 @@ int xx_main(int argc,char *argv[])
     return a.exec();
 }
 
-int main(int argc,char *argv[])
+int logcfg_main(int argc,char *argv[])
 {
     QCoreApplication a(argc,argv);
 
@@ -80,6 +81,40 @@ int main(int argc,char *argv[])
     }
     logger->info("info....");
     logger->debug("debug....");
+
+    return a.exec();
+}
+
+int main(int argc,char *argv[])
+{
+    QCoreApplication a(argc,argv);
+
+    PropertyConfigurator::configure("log.cfg");
+
+    Logger *logger = LogManager::logger("forDebug");
+
+    Layout *layout = logger->appender("appenderFile")->layout();
+
+    WriterAppender *appender = new WriterAppender();
+
+    QFile f("write.log");
+    f.open(QIODevice::WriteOnly);
+
+    QTextStream text(&f);
+
+    appender->setWriter(&text);
+    appender->setLayout(layout);
+    appender->activateOptions();
+
+    logger->addAppender(appender);
+
+    int cnt = 0;
+    while(1)
+    {
+        logger->debug("jfdksljfsld=%1\n",cnt++);
+        usleep(10 * 1000);
+    }
+
 
     return a.exec();
 }

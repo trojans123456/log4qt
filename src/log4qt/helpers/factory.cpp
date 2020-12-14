@@ -95,7 +95,9 @@ namespace Log4Qt
 	Appender *create_rolling_file_appender()
 	{	return new RollingFileAppender;	}
 	
-	
+    Appender *create_writer_appender()
+    {   return new WriterAppender;}
+
 	// Filters
 	
 	Filter *create_deny_all_filter()
@@ -335,6 +337,9 @@ namespace Log4Qt
     	mAppenderRegistry.insert(QLatin1String("Log4Qt::NullAppender"), create_null_appender);
     	mAppenderRegistry.insert(QLatin1String("org.apache.log4j.RollingFileAppender"), create_rolling_file_appender);
     	mAppenderRegistry.insert(QLatin1String("Log4Qt::RollingFileAppender"), create_rolling_file_appender);
+        /**  add writer appender */
+        mAppenderRegistry.insert(QLatin1String("org.apache.log4j.WriterAppender"),create_writer_appender);
+        mAppenderRegistry.insert(QLatin1String("Log4Qt::WriterAppender"),create_writer_appender);
     }
     
     
